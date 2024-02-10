@@ -9,11 +9,14 @@ import {
 import { FontAwesome } from '@expo/vector-icons'
 import { useEffect, useState } from 'react'
 import * as Speech from 'expo-speech'
+import * as Clipboard from 'expo-clipboard'
+import SnackBar from 'react-native-snackbar-component'
 
 export default function App() {
   const [randomQuote, setRandomQuote] = useState('')
   const [author, setAuthor] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [showSnackBar, setShowSnackBar] = useState(false)
 
   useEffect(() => {
     getRandomQuote()
@@ -34,9 +37,14 @@ export default function App() {
         setIsLoading(false)
       })
   }
-
+  // TTS
   const speak = () => {
     Speech.speak(randomQuote)
+  }
+  // Copy to Clipboard
+  const copyToClipboard = async () => {
+    Clipboard.setStringAsync(randomQuote)
+    setShowSnackBar(true)
   }
 
   // console.log(`Quote: ${randomQuote} - ${author}`)
@@ -79,7 +87,7 @@ export default function App() {
           <TouchableOpacity onPress={speak} style={styles.utilsBtn}>
             <FontAwesome name="volume-up" size={24} color="#5372f0" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.utilsBtn}>
+          <TouchableOpacity onPress={copyToClipboard} style={styles.utilsBtn}>
             <FontAwesome name="copy" size={24} color="#5372f0" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => {}} style={styles.utilsBtn}>
@@ -87,6 +95,14 @@ export default function App() {
           </TouchableOpacity>
         </View>
       </View>
+      <SnackBar
+        visible={showSnackBar}
+        textMessage="Quote copied!"
+        actionHandler={() => {
+          setShowSnackBar(false)
+        }}
+        actionText="x"
+      />
     </View>
   )
 }
