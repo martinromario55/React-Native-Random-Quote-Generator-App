@@ -1,5 +1,6 @@
 import { StatusBar } from 'expo-status-bar'
 import {
+  Linking,
   Platform,
   StyleSheet,
   Text,
@@ -47,6 +48,15 @@ export default function App() {
     setShowSnackBar(true)
   }
 
+  // Tweet Quote
+  const tweetQuote = async () => {
+    const quote = encodeURIComponent(randomQuote)
+    const author = encodeURIComponent(author)
+    const url = `https://twitter.com/intent/tweet?text=${quote}`
+
+    await Linking.openURL(url)
+  }
+
   // console.log(`Quote: ${randomQuote} - ${author}`)
   return (
     <View style={styles.container}>
@@ -90,7 +100,7 @@ export default function App() {
           <TouchableOpacity onPress={copyToClipboard} style={styles.utilsBtn}>
             <FontAwesome name="copy" size={24} color="#5372f0" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={styles.utilsBtn}>
+          <TouchableOpacity onPress={tweetQuote} style={styles.utilsBtn}>
             <FontAwesome name="twitter" size={24} color="#5372f0" />
           </TouchableOpacity>
         </View>
